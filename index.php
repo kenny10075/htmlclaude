@@ -134,12 +134,10 @@ function GetEmployeeList($connection)
 		<!-- 包装器-->
 			<div id="wrapper">
 
-				<!-- 导航 -->
+				<!-- 导航（仅主页链接） -->
 					<nav id="nav">
 						<a href="#" class="icon solid fa-home"><span>主页</span></a>
 						<a href="#work" class="icon solid fa-folder"><span>作品</span></a>
-						<a href="#contact" class="icon solid fa-envelope"><span>联系</span></a>
-						<a href="#list" class="icon solid fa-list"><span>留言列表</span></a>
 					</nav>
 
 				<!-- 主体 -->
@@ -217,7 +215,7 @@ function GetEmployeeList($connection)
 														<td><?php echo htmlspecialchars($employee['PHONE']); ?></td>
 														<td><?php echo htmlspecialchars($employee['ADDRESS']); ?></td>
 														<td><?php echo htmlspecialchars($employee['EMAIL']); ?></td>
-														</tr>
+													</tr>
 												<?php } ?>
 											</tbody>
 										</table>
