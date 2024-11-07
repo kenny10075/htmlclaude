@@ -23,6 +23,17 @@ if (isset($_POST['delete_id'])) {
     DeleteEmployee($connection, $delete_id);
 }
 
+/* 处理修改请求 */
+if (isset($_POST['update_id'])) {
+    $update_id = intval($_POST['update_id']);
+    $employee_name = isset($_POST['name']) ? htmlentities($_POST['name']) : '';
+    $employee_gender = isset($_POST['gender']) ? htmlentities($_POST['gender']) : '';
+    $employee_phone = isset($_POST['phone']) ? htmlentities($_POST['phone']) : '';
+    $employee_address = isset($_POST['address']) ? htmlentities($_POST['address']) : '';
+    $employee_email = isset($_POST['email']) ? htmlentities($_POST['email']) : '';
+    UpdateEmployee($connection, $update_id, $employee_name, $employee_gender, $employee_phone, $employee_address, $employee_email);
+}
+
 /* 如果输入字段已填充，向EMPLOYEES表添加一行 */
 $employee_name = isset($_POST['name']) ? htmlentities($_POST['name']) : '';
 $employee_gender = isset($_POST['gender']) ? htmlentities($_POST['gender']) : '';
@@ -30,7 +41,7 @@ $employee_phone = isset($_POST['phone']) ? htmlentities($_POST['phone']) : '';
 $employee_address = isset($_POST['address']) ? htmlentities($_POST['address']) : '';
 $employee_email = isset($_POST['email']) ? htmlentities($_POST['email']) : '';
 
-if (!empty($employee_name) && !empty($employee_gender) && !empty($employee_phone) && !empty($employee_address) && !empty($employee_email)) {
+if (!empty($employee_name) && !empty($employee_gender) && !empty($employee_phone) && !empty($employee_address) && !empty($employee_email) && !isset($_POST['update_id'])) {
     AddEmployee($connection, $employee_name, $employee_gender, $employee_phone, $employee_address, $employee_email);
 }
 
@@ -107,6 +118,21 @@ function AddEmployee($connection, $name, $gender, $phone, $address, $email)
     mysqli_stmt_close($stmt);
 }
 
+/* 函数：修改员工 */
+function UpdateEmployee($connection, $id, $name, $gender, $phone, $address, $email)
+{
+    $query = "UPDATE EMPLOYEES SET NAME=?, GENDER=?, PHONE=?, ADDRESS=?, EMAIL=? WHERE ID=?";
+    $stmt = mysqli_prepare($connection, $query);
+    mysqli_stmt_bind_param($stmt, 'sssssi', $name, $gender, $phone, $address, $email, $id);
+    mysqli_stmt_execute($stmt);
+    if (mysqli_stmt_affected_rows($stmt) > 0) {
+        echo "<p>员工信息已更新！</p>";
+    } else {
+        echo "<p>更新员工信息时出错: " . mysqli_error($connection) . "</p>";
+    }
+    mysqli_stmt_close($stmt);
+}
+
 /* 函数：删除员工 */
 function DeleteEmployee($connection, $id)
 {
@@ -159,6 +185,7 @@ function GetEmployeeList($connection)
 					<nav id="nav">
 						<a href="#" class="icon solid fa-home"><span>主页</span></a>
 						<a href="#work" class="icon solid fa-folder"><span>作品</span></a>
+						<a href="#contact" class="icon solid fa-envelope"><span>联系</span></a>
 					</nav>
 
 				<!-- 主体 -->
@@ -169,46 +196,36 @@ function GetEmployeeList($connection)
 								<header>
 									<h1>Jane Doe</h1>
 									<p>高级星际投影师</p>
+									<h2>添加员工</h2>
 								</header>
-								<a href="#work" class="jumplink pic">
-									<span class="arrow icon solid fa-chevron-right"><span>查看我的作品</span></span>
-									<img src="images/me.jpg" alt="" />
-								</a>
-
-								<!-- 添加员工 -->
-								<section id="contact">
-									<header>
-										<h2>添加员工</h2>
-									</header>
-									<form action="" method="post">
-										<div>
-											<div class="row">
-												<div class="col-6 col-12-medium">
-													<input type="text" name="name" placeholder="姓名" required />
-												</div>
-												<div class="col-6 col-12-medium">
-													<select name="gender" required>
-														<option value="">选择性别</option>
-														<option value="男">男</option>
-														<option value="女">女</option>
-													</select>
-												</div>
-												<div class="col-6 col-12-medium">
-													<input type="text" name="phone" placeholder="电话" required />
-												</div>
-												<div class="col-6 col-12-medium">
-													<input type="text" name="address" placeholder="居住地址" required />
-												</div>
-												<div class="col-12">
-													<input type="email" name="email" placeholder="电子邮件" required />
-												</div>
-												<div class="col-12">
-													<input type="submit" value="添加员工" />
-												</div>
+								<form action="" method="post">
+									<div>
+										<div class="row">
+											<div class="col-6 col-12-medium">
+												<input type="text" name="name" placeholder="姓名" required />
+											</div>
+											<div class="col-6 col-12-medium">
+												<select name="gender" required>
+													<option value="">选择性别</option>
+													<option value="男">男</option>
+													<option value="女">女</option>
+												</select>
+											</div>
+											<div class="col-6 col-12-medium">
+												<input type="text" name="phone" placeholder="电话" required />
+											</div>
+											<div class="col-6 col-12-medium">
+												<input type="text" name="address" placeholder="居住地址" required />
+											</div>
+											<div class="col-12">
+												<input type="email" name="email" placeholder="电子邮件" required />
+											</div>
+											<div class="col-12">
+												<input type="submit" value="添加员工" />
 											</div>
 										</div>
-									</form>
-								</section>
+									</div>
+								</form>
 							</article>
 
 						<!-- 作品页面：删除员工功能 -->
@@ -254,6 +271,48 @@ function GetEmployeeList($connection)
 										<p>目前没有员工记录。</p>
 									<?php } ?>
 								</section>
+							</article>
+
+						<!-- 联系页面：修改员工功能 -->
+							<article id="contact" class="panel">
+								<header>
+									<h2>修改员工信息</h2>
+								</header>
+								<form action="" method="post">
+									<div class="row">
+										<div class="col-6 col-12-medium">
+											<label for="update_id">选择员工</label>
+											<select name="update_id" required>
+												<option value="">选择员工</option>
+												<?php foreach ($employee_list as $employee) { ?>
+													<option value="<?php echo $employee['ID']; ?>"><?php echo $employee['NAME']; ?></option>
+												<?php } ?>
+											</select>
+										</div>
+										<div class="col-6 col-12-medium">
+											<input type="text" name="name" placeholder="姓名" required />
+										</div>
+										<div class="col-6 col-12-medium">
+											<select name="gender" required>
+												<option value="">选择性别</option>
+												<option value="男">男</option>
+												<option value="女">女</option>
+											</select>
+										</div>
+										<div class="col-6 col-12-medium">
+											<input type="text" name="phone" placeholder="电话" required />
+										</div>
+										<div class="col-6 col-12-medium">
+											<input type="text" name="address" placeholder="居住地址" required />
+										</div>
+										<div class="col-12">
+											<input type="email" name="email" placeholder="电子邮件" required />
+										</div>
+										<div class="col-12">
+											<input type="submit" value="更新信息" />
+										</div>
+									</div>
+								</form>
 							</article>
 
 					</div>
