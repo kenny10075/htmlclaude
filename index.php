@@ -38,7 +38,6 @@ mysqli_close($connection);
 function VerifyEmployeesTable($connection, $dbName)
 {
     if (!TableExists("EMPLOYEES", $connection, $dbName)) {
-        // 如果表不存在，创建表
         $query = "CREATE TABLE EMPLOYEES (
             ID INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             NAME VARCHAR(50) NOT NULL,
@@ -51,7 +50,6 @@ function VerifyEmployeesTable($connection, $dbName)
             echo "<p>创建表时出错: " . mysqli_error($connection) . "</p>";
         }
     } else {
-        // 如果表存在，检查并添加缺失的列
         AddMissingColumns($connection);
     }
 }
@@ -69,7 +67,6 @@ function AddMissingColumns($connection)
     foreach ($columns as $column => $alterQuery) {
         $result = mysqli_query($connection, "SHOW COLUMNS FROM EMPLOYEES LIKE '$column'");
         if (mysqli_num_rows($result) == 0) {
-            // 如果列不存在，则添加该列
             if (!mysqli_query($connection, $alterQuery)) {
                 echo "<p>添加 $column 列时出错: " . mysqli_error($connection) . "</p>";
             }
@@ -92,7 +89,6 @@ function TableExists($tableName, $connection, $dbName)
 /* 函数：向表中添加员工 */
 function AddEmployee($connection, $name, $gender, $phone, $address, $email)
 {
-    // 使用预处理语句以提高安全性
     $query = "INSERT INTO EMPLOYEES (NAME, GENDER, PHONE, ADDRESS, EMAIL) VALUES (?, ?, ?, ?, ?)";
     $stmt = mysqli_prepare($connection, $query);
     mysqli_stmt_bind_param($stmt, 'sssss', $name, $gender, $phone, $address, $email);
@@ -138,7 +134,7 @@ function GetEmployeeList($connection)
 		<!-- 包装器-->
 			<div id="wrapper">
 
-				<!-- 导航（保持不变） -->
+				<!-- 导航 -->
 					<nav id="nav">
 						<a href="#" class="icon solid fa-home"><span>主页</span></a>
 						<a href="#work" class="icon solid fa-folder"><span>作品</span></a>
@@ -149,7 +145,7 @@ function GetEmployeeList($connection)
 				<!-- 主体 -->
 					<div id="main">
 
-						<!-- 自我介绍 -->
+						<!-- 自我介绍，包含添加员工和员工列表 -->
 							<article id="home" class="panel intro">
 								<header>
 									<h1>Jane Doe</h1>
@@ -159,76 +155,98 @@ function GetEmployeeList($connection)
 									<span class="arrow icon solid fa-chevron-right"><span>查看我的作品</span></span>
 									<img src="images/me.jpg" alt="" />
 								</a>
-							</article>
 
-						<!-- 联系 -->
-							<article id="contact" class="panel">
-								<header>
-									<h2>添加员工</h2>
-								</header>
-								<form action="" method="post">
-									<div>
-										<div class="row">
-											<div class="col-6 col-12-medium">
-												<input type="text" name="name" placeholder="姓名" required />
-											</div>
-											<div class="col-6 col-12-medium">
-												<select name="gender" required>
-													<option value="">选择性别</option>
-													<option value="男">男</option>
-													<option value="女">女</option>
-												</select>
-											</div>
-											<div class="col-6 col-12-medium">
-												<input type="text" name="phone" placeholder="电话" required />
-											</div>
-											<div class="col-6 col-12-medium">
-												<input type="text" name="address" placeholder="居住地址" required />
-											</div>
-											<div class="col-12">
-												<input type="email" name="email" placeholder="电子邮件" required />
-											</div>
-											<div class="col-12">
-												<input type="submit" value="添加员工" />
+								<!-- 添加员工 -->
+								<section id="contact">
+									<header>
+										<h2>添加员工</h2>
+									</header>
+									<form action="" method="post">
+										<div>
+											<div class="row">
+												<div class="col-6 col-12-medium">
+													<input type="text" name="name" placeholder="姓名" required />
+												</div>
+												<div class="col-6 col-12-medium">
+													<select name="gender" required>
+														<option value="">选择性别</option>
+														<option value="男">男</option>
+														<option value="女">女</option>
+													</select>
+												</div>
+												<div class="col-6 col-12-medium">
+													<input type="text" name="phone" placeholder="电话" required />
+												</div>
+												<div class="col-6 col-12-medium">
+													<input type="text" name="address" placeholder="居住地址" required />
+												</div>
+												<div class="col-12">
+													<input type="email" name="email" placeholder="电子邮件" required />
+												</div>
+												<div class="col-12">
+													<input type="submit" value="添加员工" />
+												</div>
 											</div>
 										</div>
-									</div>
-								</form>
+									</form>
+								</section>
+
+								<!-- 员工列表 -->
+								<section id="list">
+									<header>
+										<h2>员工列表</h2>
+									</header>
+									<?php if (!empty($employee_list)) { ?>
+										<table>
+											<thead>
+												<tr>
+													<th>ID</th>
+													<th>姓名</th>
+													<th>性别</th>
+													<th>电话</th>
+													<th>居住地址</th>
+													<th>电子邮件</th>
+												</tr>
+											</thead>
+											<tbody>
+												<?php foreach ($employee_list as $employee) { ?>
+													<tr>
+														<td><?php echo htmlspecialchars($employee['ID']); ?></td>
+														<td><?php echo htmlspecialchars($employee['NAME']); ?></td>
+														<td><?php echo htmlspecialchars($employee['GENDER']); ?></td>
+														<td><?php echo htmlspecialchars($employee['PHONE']); ?></td>
+														<td><?php echo htmlspecialchars($employee['ADDRESS']); ?></td>
+														<td><?php echo htmlspecialchars($employee['EMAIL']); ?></td>
+														</tr>
+												<?php } ?>
+											</tbody>
+										</table>
+									<?php } else { ?>
+										<p>目前没有员工记录。</p>
+									<?php } ?>
+								</section>
 							</article>
 
-						<!-- 留言列表 -->
-							<article id="list" class="panel">
+						<!-- 作品 -->
+							<article id="work" class="panel">
 								<header>
-									<h2>员工列表</h2>
+									<h2>作品</h2>
 								</header>
-								<?php if (!empty($employee_list)) { ?>
-									<table>
-										<thead>
-											<tr>
-												<th>ID</th>
-												<th>姓名</th>
-												<th>性别</th>
-												<th>电话</th>
-												<th>居住地址</th>
-												<th>电子邮件</th>
-											</tr>
-										</thead>
-										<tbody>
-											<?php foreach ($employee_list as $employee) { ?>
-												<tr>
-													<td><?php echo htmlspecialchars($employee['ID']); ?></td>
-													<td><?php echo htmlspecialchars($employee['NAME']); ?></td>
-													<td><?php echo htmlspecialchars($employee['GENDER']); ?></td>
-													<td><?php echo htmlspecialchars($employee['PHONE']); ?></td>
-													<td><?php echo htmlspecialchars($employee['ADDRESS']); ?></td>
-													<td><?php echo htmlspecialchars($employee['EMAIL']); ?></td>
-												</tr>
-											<?php } ?>
-										</tbody>
-									</table>
-								<?php } else { ?>
-									<p>目前没有员工记录。</p>
-								<?php } ?>
+								<p>这里展示了我的一些作品，欢迎欣赏。</p>
+								<section>
+									<div class="row">
+										<div class="col-4 col-6-medium col-12-small">
+											<a href="#" class="image fit"><img src="images/pic01.jpg" alt=""></a>
+										</div>
+										<div class="col-4 col-6-medium col-12-small">
+											<a href="#" class="image fit"><img src="images/pic02.jpg" alt=""></a>
+										</div>
+										<div class="col-4 col-6-medium col-12-small">
+											<a href="#" class="image fit"><img src="images/pic03.jpg" alt=""></a>
+										</div>
+										<!-- 保留原有内容 -->
+									</div>
+								</section>
 							</article>
 
 					</div>
