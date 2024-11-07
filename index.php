@@ -17,6 +17,12 @@ if (mysqli_connect_errno()) {
 /* 确保EMPLOYEES表存在并包含所需字段 */
 VerifyEmployeesTable($connection, DB_DATABASE);
 
+/* 处理删除请求 */
+if (isset($_POST['delete_id'])) {
+    $delete_id = intval($_POST['delete_id']);
+    DeleteEmployee($connection, $delete_id);
+}
+
 /* 如果输入字段已填充，向EMPLOYEES表添加一行 */
 $employee_name = isset($_POST['name']) ? htmlentities($_POST['name']) : '';
 $employee_gender = isset($_POST['gender']) ? htmlentities($_POST['gender']) : '';
@@ -101,6 +107,21 @@ function AddEmployee($connection, $name, $gender, $phone, $address, $email)
     mysqli_stmt_close($stmt);
 }
 
+/* 函数：删除员工 */
+function DeleteEmployee($connection, $id)
+{
+    $query = "DELETE FROM EMPLOYEES WHERE ID = ?";
+    $stmt = mysqli_prepare($connection, $query);
+    mysqli_stmt_bind_param($stmt, 'i', $id);
+    mysqli_stmt_execute($stmt);
+    if (mysqli_stmt_affected_rows($stmt) > 0) {
+        echo "<p>员工已删除！</p>";
+    } else {
+        echo "<p>删除员工时出错: " . mysqli_error($connection) . "</p>";
+    }
+    mysqli_stmt_close($stmt);
+}
+
 /* 函数：获取员工列表 */
 function GetEmployeeList($connection)
 {
@@ -134,7 +155,7 @@ function GetEmployeeList($connection)
 		<!-- 包装器-->
 			<div id="wrapper">
 
-				<!-- 导航（仅主页链接） -->
+				<!-- 导航 -->
 					<nav id="nav">
 						<a href="#" class="icon solid fa-home"><span>主页</span></a>
 						<a href="#work" class="icon solid fa-folder"><span>作品</span></a>
@@ -143,7 +164,7 @@ function GetEmployeeList($connection)
 				<!-- 主体 -->
 					<div id="main">
 
-						<!-- 自我介绍，包含添加员工和员工列表 -->
+						<!-- 主页面：新增员工功能 -->
 							<article id="home" class="panel intro">
 								<header>
 									<h1>Jane Doe</h1>
@@ -188,12 +209,15 @@ function GetEmployeeList($connection)
 										</div>
 									</form>
 								</section>
+							</article>
 
-								<!-- 员工列表 -->
-								<section id="list">
-									<header>
-										<h2>员工列表</h2>
-									</header>
+						<!-- 作品页面：删除员工功能 -->
+							<article id="work" class="panel">
+								<header>
+									<h2>员工管理</h2>
+								</header>
+								<p>在此查看和删除员工记录。</p>
+								<section>
 									<?php if (!empty($employee_list)) { ?>
 										<table>
 											<thead>
@@ -204,6 +228,7 @@ function GetEmployeeList($connection)
 													<th>电话</th>
 													<th>居住地址</th>
 													<th>电子邮件</th>
+													<th>操作</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -215,6 +240,12 @@ function GetEmployeeList($connection)
 														<td><?php echo htmlspecialchars($employee['PHONE']); ?></td>
 														<td><?php echo htmlspecialchars($employee['ADDRESS']); ?></td>
 														<td><?php echo htmlspecialchars($employee['EMAIL']); ?></td>
+														<td>
+															<form action="" method="post" style="display:inline;">
+																<input type="hidden" name="delete_id" value="<?php echo $employee['ID']; ?>" />
+																<button type="submit" onclick="return confirm('确定删除此员工？');">删除</button>
+															</form>
+														</td>
 													</tr>
 												<?php } ?>
 											</tbody>
@@ -222,28 +253,6 @@ function GetEmployeeList($connection)
 									<?php } else { ?>
 										<p>目前没有员工记录。</p>
 									<?php } ?>
-								</section>
-							</article>
-
-						<!-- 作品 -->
-							<article id="work" class="panel">
-								<header>
-									<h2>作品</h2>
-								</header>
-								<p>这里展示了我的一些作品，欢迎欣赏。</p>
-								<section>
-									<div class="row">
-										<div class="col-4 col-6-medium col-12-small">
-											<a href="#" class="image fit"><img src="images/pic01.jpg" alt=""></a>
-										</div>
-										<div class="col-4 col-6-medium col-12-small">
-											<a href="#" class="image fit"><img src="images/pic02.jpg" alt=""></a>
-										</div>
-										<div class="col-4 col-6-medium col-12-small">
-											<a href="#" class="image fit"><img src="images/pic03.jpg" alt=""></a>
-										</div>
-										<!-- 保留原有内容 -->
-									</div>
 								</section>
 							</article>
 
