@@ -209,10 +209,10 @@ function SearchEmployees($connection, $search_query)
 
 				<!-- 导航 -->
 					<nav id="nav">
-						<a href="#" class="icon solid fa-home"><span>主页</span></a>
-						<a href="#work" class="icon solid fa-folder"><span>作品</span></a>
-						<a href="#contact" class="icon solid fa-envelope"><span>联系</span></a>
-						<a href="#list" class="icon solid fa-list"><span>留言列表</span></a>
+						<a href="#" class="icon solid fa-home"><span>新增資料</span></a>
+						<a href="#work" class="icon solid fa-folder"><span>刪除資料</span></a>
+						<a href="#contact" class="icon solid fa-envelope"><span>修改資料</span></a>
+						<a href="#list" class="icon solid fa-list"><span>查詢資料</span></a>
 					</nav>
 
 				<!-- 主体 -->
@@ -221,9 +221,9 @@ function SearchEmployees($connection, $search_query)
 						<!-- 主页面：新增员工功能 -->
 							<article id="home" class="panel intro">
 								<header>
-									<h1>Jane Doe</h1>
-									<p>高级星际投影师</p>
-									<h2>添加员工</h2>
+									<h1>個人基本資料創建表</h1>
+									<p>設計一款表格可以將大家的基本資料加入到裡面!!!</p>
+									<h2>添加資料</h2>
 								</header>
 								<form action="" method="post">
 									<div>
@@ -233,7 +233,7 @@ function SearchEmployees($connection, $search_query)
 											</div>
 											<div class="col-6 col-12-medium">
 												<select name="gender" required>
-													<option value="">选择性别</option>
+													<option value="">選擇性别</option>
 													<option value="男">男</option>
 													<option value="女">女</option>
 												</select>
@@ -258,9 +258,9 @@ function SearchEmployees($connection, $search_query)
 						<!-- 作品页面：删除员工功能 -->
 							<article id="work" class="panel">
 								<header>
-									<h2>员工管理</h2>
+									<h2>帳號管理</h2>
 								</header>
-								<p>在此查看和删除员工记录。</p>
+								<p>在此查看和删除帳號資料。</p>
 								<section>
 									<?php if (!empty($employee_list)) { ?>
 										<table>
@@ -269,9 +269,9 @@ function SearchEmployees($connection, $search_query)
 													<th>ID</th>
 													<th>姓名</th>
 													<th>性别</th>
-													<th>电话</th>
+													<th>電話</th>
 													<th>居住地址</th>
-													<th>电子邮件</th>
+													<th>電子郵件</th>
 													<th>操作</th>
 												</tr>
 											</thead>
@@ -287,7 +287,7 @@ function SearchEmployees($connection, $search_query)
 														<td>
 															<form action="" method="post" style="display:inline;">
 																<input type="hidden" name="delete_id" value="<?php echo $employee['ID']; ?>" />
-																<button type="submit" onclick="return confirm('确定删除此员工？');">删除</button>
+																<button type="submit" onclick="return confirm('確定刪除此員工？');">删除</button>
 															</form>
 														</td>
 													</tr>
@@ -295,7 +295,7 @@ function SearchEmployees($connection, $search_query)
 											</tbody>
 										</table>
 									<?php } else { ?>
-										<p>目前没有员工记录。</p>
+										<p>目前沒有帳號紀錄。</p>
 									<?php } ?>
 								</section>
 							</article>
@@ -303,14 +303,14 @@ function SearchEmployees($connection, $search_query)
 						<!-- 联系页面：修改员工功能 -->
 							<article id="contact" class="panel">
 								<header>
-									<h2>修改员工信息</h2>
+									<h2>修改帳號資料</h2>
 								</header>
 								<form action="" method="post">
 									<div class="row">
 										<div class="col-6 col-12-medium">
-											<label for="update_id">选择员工</label>
+											<label for="update_id">選擇帳號</label>
 											<select name="update_id" required>
-												<option value="">选择员工</option>
+												<option value="">選擇帳號</option>
 												<?php foreach ($employee_list as $employee) { ?>
 													<option value="<?php echo $employee['ID']; ?>"><?php echo $employee['NAME']; ?></option>
 												<?php } ?>
@@ -321,19 +321,19 @@ function SearchEmployees($connection, $search_query)
 										</div>
 										<div class="col-6 col-12-medium">
 											<select name="gender" required>
-												<option value="">选择性别</option>
+												<option value="">選擇性别</option>
 												<option value="男">男</option>
 												<option value="女">女</option>
 											</select>
 										</div>
 										<div class="col-6 col-12-medium">
-											<input type="text" name="phone" placeholder="电话" required />
+											<input type="text" name="phone" placeholder="電話" required />
 										</div>
 										<div class="col-6 col-12-medium">
 											<input type="text" name="address" placeholder="居住地址" required />
 										</div>
 										<div class="col-12">
-											<input type="email" name="email" placeholder="电子邮件" required />
+											<input type="email" name="email" placeholder="電子郵件" required />
 										</div>
 										<div class="col-12">
 											<input type="submit" value="更新信息" />
@@ -345,7 +345,7 @@ function SearchEmployees($connection, $search_query)
 						<!-- 列表页面：查询员工功能 -->
 							<article id="list" class="panel">
 								<header>
-									<h2>员工查询</h2>
+									<h2>帳號查詢</h2>
 								</header>
 								<form action="" method="post">
 									<div class="row">
@@ -365,9 +365,9 @@ function SearchEmployees($connection, $search_query)
 													<th>ID</th>
 													<th>姓名</th>
 													<th>性别</th>
-													<th>电话</th>
+													<th>電話</th>
 													<th>居住地址</th>
-													<th>电子邮件</th>
+													<th>電子郵件</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -384,7 +384,7 @@ function SearchEmployees($connection, $search_query)
 											</tbody>
 										</table>
 									<?php } else { ?>
-										<p>没有找到匹配的员工记录。</p>
+										<p>没有找到帳號紀錄。</p>
 									<?php } ?>
 								</section>
 							</article>
@@ -394,7 +394,7 @@ function SearchEmployees($connection, $search_query)
 				<!-- 页脚 -->
 					<div id="footer">
 						<ul class="copyright">
-							<li>&copy; 未命名.</li><li>设计: <a href="http://html5up.net">HTML5 UP</a></li>
+							<li>&copy; 未命名.</li><li>設計: <a href="http://html5up.net">HTML5 UP</a></li>
 						</ul>
 					</div>
 
