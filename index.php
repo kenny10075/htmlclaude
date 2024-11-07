@@ -1,10 +1,10 @@
 <?php
-// 开发过程中启用错误报告（在生产环境中请移除或注释掉）
+// 启用错误报告（在生产环境中请移除或注释掉）
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 // 包含数据库配置文件
-include "../inc/dbinfo.inc"; // 这将包含您的数据库连接常量
+include "../inc/dbinfo.inc"; // 包含您的数据库连接常量
 
 /* 连接到MySQL并选择数据库 */
 $connection = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
@@ -34,7 +34,7 @@ $employee_list = GetEmployeeList($connection);
 /* 关闭数据库连接 */
 mysqli_close($connection);
 
-/* 函数：验证表是否存在，并检查所需字段 */
+/* 函数：验证表是否存在，如不存在则创建 */
 function VerifyEmployeesTable($connection, $dbName)
 {
     if (!TableExists("EMPLOYEES", $connection, $dbName)) {
@@ -51,7 +51,7 @@ function VerifyEmployeesTable($connection, $dbName)
             echo "<p>创建表时出错: " . mysqli_error($connection) . "</p>";
         }
     } else {
-        // 如果表存在，检查是否有缺失的字段并添加它们
+        // 如果表存在，检查并添加缺失的列
         AddMissingColumns($connection);
     }
 }
@@ -62,7 +62,8 @@ function AddMissingColumns($connection)
     $columns = [
         'GENDER' => "ALTER TABLE EMPLOYEES ADD COLUMN GENDER VARCHAR(10)",
         'PHONE' => "ALTER TABLE EMPLOYEES ADD COLUMN PHONE VARCHAR(15)",
-        'ADDRESS' => "ALTER TABLE EMPLOYEES ADD COLUMN ADDRESS VARCHAR(100)"
+        'ADDRESS' => "ALTER TABLE EMPLOYEES ADD COLUMN ADDRESS VARCHAR(100)",
+        'EMAIL' => "ALTER TABLE EMPLOYEES ADD COLUMN EMAIL VARCHAR(50) NOT NULL"
     ];
 
     foreach ($columns as $column => $alterQuery) {
@@ -147,6 +148,7 @@ function GetEmployeeList($connection)
 
 				<!-- 主体 -->
 					<div id="main">
+
 						<!-- 自我介绍 -->
 							<article id="home" class="panel intro">
 								<header>
