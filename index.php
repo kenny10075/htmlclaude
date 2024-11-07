@@ -1,6 +1,4 @@
 <?php
-// PHP脚本开始
-
 // 开发过程中启用错误报告（在生产环境中请移除或注释掉）
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -16,7 +14,7 @@ if (mysqli_connect_errno()) {
     exit();
 }
 
-/* 确保EMPLOYEES表存在 */
+/* 确保EMPLOYEES表存在并包含所需字段 */
 VerifyEmployeesTable($connection, DB_DATABASE);
 
 /* 如果输入字段已填充，向EMPLOYEES表添加一行 */
@@ -36,10 +34,11 @@ $employee_list = GetEmployeeList($connection);
 /* 关闭数据库连接 */
 mysqli_close($connection);
 
-/* 函数：验证表是否存在，如不存在则创建 */
+/* 函数：验证表是否存在，并检查所需字段 */
 function VerifyEmployeesTable($connection, $dbName)
 {
     if (!TableExists("EMPLOYEES", $connection, $dbName)) {
+        // 如果表不存在，创建表
         $query = "CREATE TABLE EMPLOYEES (
             ID INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             NAME VARCHAR(50) NOT NULL,
@@ -48,9 +47,31 @@ function VerifyEmployeesTable($connection, $dbName)
             ADDRESS VARCHAR(100),
             EMAIL VARCHAR(50) NOT NULL
         )";
-
         if (!mysqli_query($connection, $query)) {
             echo "<p>创建表时出错: " . mysqli_error($connection) . "</p>";
+        }
+    } else {
+        // 如果表存在，检查是否有缺失的字段并添加它们
+        AddMissingColumns($connection);
+    }
+}
+
+/* 函数：检查并添加缺失的列 */
+function AddMissingColumns($connection)
+{
+    $columns = [
+        'GENDER' => "ALTER TABLE EMPLOYEES ADD COLUMN GENDER VARCHAR(10)",
+        'PHONE' => "ALTER TABLE EMPLOYEES ADD COLUMN PHONE VARCHAR(15)",
+        'ADDRESS' => "ALTER TABLE EMPLOYEES ADD COLUMN ADDRESS VARCHAR(100)"
+    ];
+
+    foreach ($columns as $column => $alterQuery) {
+        $result = mysqli_query($connection, "SHOW COLUMNS FROM EMPLOYEES LIKE '$column'");
+        if (mysqli_num_rows($result) == 0) {
+            // 如果列不存在，则添加该列
+            if (!mysqli_query($connection, $alterQuery)) {
+                echo "<p>添加 $column 列时出错: " . mysqli_error($connection) . "</p>";
+            }
         }
     }
 }
@@ -103,11 +124,6 @@ function GetEmployeeList($connection)
 }
 ?>
 <!DOCTYPE HTML>
-<!--
-	Astral by HTML5 UP
-	html5up.net | @ajlkn
-	根据CCA 3.0许可证（html5up.net/license）免费用于个人和商业用途
--->
 <html>
 	<head>
 		<title>Astral by HTML5 UP</title>
@@ -131,7 +147,6 @@ function GetEmployeeList($connection)
 
 				<!-- 主体 -->
 					<div id="main">
-
 						<!-- 自我介绍 -->
 							<article id="home" class="panel intro">
 								<header>
@@ -142,28 +157,6 @@ function GetEmployeeList($connection)
 									<span class="arrow icon solid fa-chevron-right"><span>查看我的作品</span></span>
 									<img src="images/me.jpg" alt="" />
 								</a>
-							</article>
-
-						<!-- 作品 -->
-							<article id="work" class="panel">
-								<header>
-									<h2>作品</h2>
-								</header>
-								<p>这里展示了我的一些作品，欢迎欣赏。</p>
-								<section>
-									<div class="row">
-										<div class="col-4 col-6-medium col-12-small">
-											<a href="#" class="image fit"><img src="images/pic01.jpg" alt=""></a>
-										</div>
-										<div class="col-4 col-6-medium col-12-small">
-											<a href="#" class="image fit"><img src="images/pic02.jpg" alt=""></a>
-										</div>
-										<div class="col-4 col-6-medium col-12-small">
-											<a href="#" class="image fit"><img src="images/pic03.jpg" alt=""></a>
-										</div>
-										<!-- 保留原有内容 -->
-									</div>
-								</section>
 							</article>
 
 						<!-- 联系 -->
