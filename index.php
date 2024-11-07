@@ -218,52 +218,176 @@ function SearchEmployees($connection, $search_query)
 				<!-- 主体 -->
 					<div id="main">
 
-						<!-- 查詢功能 -->
-						<article id="list" class="panel">
-							<header>
-								<h2>员工查询</h2>
-							</header>
-							<form action="" method="post">
-								<div class="row">
-									<div class="col-9 col-12-medium">
-										<input type="text" name="search" placeholder="输入查询条件..." value="<?php echo htmlspecialchars($search_query); ?>"/>
+						<!-- 主页面：新增员工功能 -->
+							<article id="home" class="panel intro">
+								<header>
+									<h1>Jane Doe</h1>
+									<p>高级星际投影师</p>
+									<h2>添加员工</h2>
+								</header>
+								<form action="" method="post">
+									<div>
+										<div class="row">
+											<div class="col-6 col-12-medium">
+												<input type="text" name="name" placeholder="姓名" required />
+											</div>
+											<div class="col-6 col-12-medium">
+												<select name="gender" required>
+													<option value="">选择性别</option>
+													<option value="男">男</option>
+													<option value="女">女</option>
+												</select>
+											</div>
+											<div class="col-6 col-12-medium">
+												<input type="text" name="phone" placeholder="电话" required />
+											</div>
+											<div class="col-6 col-12-medium">
+												<input type="text" name="address" placeholder="居住地址" required />
+											</div>
+											<div class="col-12">
+												<input type="email" name="email" placeholder="电子邮件" required />
+											</div>
+											<div class="col-12">
+												<input type="submit" value="添加员工" />
+											</div>
+										</div>
 									</div>
-									<div class="col-3 col-12-medium">
-										<input type="submit" value="搜索" />
-									</div>
-								</div>
-							</form>
-							<section>
-								<?php if (!empty($employee_list)) { ?>
-									<table>
-										<thead>
-											<tr>
-												<th>ID</th>
-												<th>姓名</th>
-												<th>性别</th>
-												<th>电话</th>
-												<th>居住地址</th>
-												<th>电子邮件</th>
-											</tr>
-										</thead>
-										<tbody>
-											<?php foreach ($employee_list as $employee) { ?>
+								</form>
+							</article>
+
+						<!-- 作品页面：删除员工功能 -->
+							<article id="work" class="panel">
+								<header>
+									<h2>员工管理</h2>
+								</header>
+								<p>在此查看和删除员工记录。</p>
+								<section>
+									<?php if (!empty($employee_list)) { ?>
+										<table>
+											<thead>
 												<tr>
-													<td><?php echo htmlspecialchars($employee['ID']); ?></td>
-													<td><?php echo htmlspecialchars($employee['NAME']); ?></td>
-													<td><?php echo htmlspecialchars($employee['GENDER']); ?></td>
-													<td><?php echo htmlspecialchars($employee['PHONE']); ?></td>
-													<td><?php echo htmlspecialchars($employee['ADDRESS']); ?></td>
-													<td><?php echo htmlspecialchars($employee['EMAIL']); ?></td>
+													<th>ID</th>
+													<th>姓名</th>
+													<th>性别</th>
+													<th>电话</th>
+													<th>居住地址</th>
+													<th>电子邮件</th>
+													<th>操作</th>
 												</tr>
-											<?php } ?>
-										</tbody>
-									</table>
-								<?php } else { ?>
-									<p>没有找到匹配的员工记录。</p>
-								<?php } ?>
-							</section>
-						</article>
+											</thead>
+											<tbody>
+												<?php foreach ($employee_list as $employee) { ?>
+													<tr>
+														<td><?php echo htmlspecialchars($employee['ID']); ?></td>
+														<td><?php echo htmlspecialchars($employee['NAME']); ?></td>
+														<td><?php echo htmlspecialchars($employee['GENDER']); ?></td>
+														<td><?php echo htmlspecialchars($employee['PHONE']); ?></td>
+														<td><?php echo htmlspecialchars($employee['ADDRESS']); ?></td>
+														<td><?php echo htmlspecialchars($employee['EMAIL']); ?></td>
+														<td>
+															<form action="" method="post" style="display:inline;">
+																<input type="hidden" name="delete_id" value="<?php echo $employee['ID']; ?>" />
+																<button type="submit" onclick="return confirm('确定删除此员工？');">删除</button>
+															</form>
+														</td>
+													</tr>
+												<?php } ?>
+											</tbody>
+										</table>
+									<?php } else { ?>
+										<p>目前没有员工记录。</p>
+									<?php } ?>
+								</section>
+							</article>
+
+						<!-- 联系页面：修改员工功能 -->
+							<article id="contact" class="panel">
+								<header>
+									<h2>修改员工信息</h2>
+								</header>
+								<form action="" method="post">
+									<div class="row">
+										<div class="col-6 col-12-medium">
+											<label for="update_id">选择员工</label>
+											<select name="update_id" required>
+												<option value="">选择员工</option>
+												<?php foreach ($employee_list as $employee) { ?>
+													<option value="<?php echo $employee['ID']; ?>"><?php echo $employee['NAME']; ?></option>
+												<?php } ?>
+											</select>
+										</div>
+										<div class="col-6 col-12-medium">
+											<input type="text" name="name" placeholder="姓名" required />
+										</div>
+										<div class="col-6 col-12-medium">
+											<select name="gender" required>
+												<option value="">选择性别</option>
+												<option value="男">男</option>
+												<option value="女">女</option>
+											</select>
+										</div>
+										<div class="col-6 col-12-medium">
+											<input type="text" name="phone" placeholder="电话" required />
+										</div>
+										<div class="col-6 col-12-medium">
+											<input type="text" name="address" placeholder="居住地址" required />
+										</div>
+										<div class="col-12">
+											<input type="email" name="email" placeholder="电子邮件" required />
+										</div>
+										<div class="col-12">
+											<input type="submit" value="更新信息" />
+										</div>
+									</div>
+								</form>
+							</article>
+
+						<!-- 列表页面：查询员工功能 -->
+							<article id="list" class="panel">
+								<header>
+									<h2>员工查询</h2>
+								</header>
+								<form action="" method="post">
+									<div class="row">
+										<div class="col-9 col-12-medium">
+											<input type="text" name="search" placeholder="输入查询条件..." value="<?php echo htmlspecialchars($search_query); ?>"/>
+										</div>
+										<div class="col-3 col-12-medium">
+											<input type="submit" value="搜索" />
+										</div>
+									</div>
+								</form>
+								<section>
+									<?php if (!empty($employee_list)) { ?>
+										<table>
+											<thead>
+												<tr>
+													<th>ID</th>
+													<th>姓名</th>
+													<th>性别</th>
+													<th>电话</th>
+													<th>居住地址</th>
+													<th>电子邮件</th>
+												</tr>
+											</thead>
+											<tbody>
+												<?php foreach ($employee_list as $employee) { ?>
+													<tr>
+														<td><?php echo htmlspecialchars($employee['ID']); ?></td>
+														<td><?php echo htmlspecialchars($employee['NAME']); ?></td>
+														<td><?php echo htmlspecialchars($employee['GENDER']); ?></td>
+														<td><?php echo htmlspecialchars($employee['PHONE']); ?></td>
+														<td><?php echo htmlspecialchars($employee['ADDRESS']); ?></td>
+														<td><?php echo htmlspecialchars($employee['EMAIL']); ?></td>
+													</tr>
+												<?php } ?>
+											</tbody>
+										</table>
+									<?php } else { ?>
+										<p>没有找到匹配的员工记录。</p>
+									<?php } ?>
+								</section>
+							</article>
 
 					</div>
 
