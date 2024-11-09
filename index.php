@@ -239,16 +239,16 @@ function SearchEmployees($connection, $search_query)
 												</select>
 											</div>
 											<div class="col-6 col-12-medium">
-												<input type="text" name="phone" placeholder="电话" required />
+												<input type="text" name="phone" placeholder="電話" required />
 											</div>
 											<div class="col-6 col-12-medium">
 												<input type="text" name="address" placeholder="居住地址" required />
 											</div>
 											<div class="col-12">
-												<input type="email" name="email" placeholder="电子邮件" required />
+												<input type="email" name="email" placeholder="電子郵件" required />
 											</div>
 											<div class="col-12">
-												<input type="submit" value="添加员工" />
+												<input type="submit" value="添加帳號" />
 											</div>
 										</div>
 									</div>
@@ -350,7 +350,7 @@ function SearchEmployees($connection, $search_query)
 								<form action="" method="post">
 									<div class="row">
 										<div class="col-9 col-12-medium">
-											<input type="text" name="search" placeholder="输入查询条件..." value="<?php echo htmlspecialchars($search_query); ?>"/>
+											<input type="text" name="search" placeholder="輸入查詢條件..." value="<?php echo htmlspecialchars($search_query); ?>"/>
 										</div>
 										<div class="col-3 col-12-medium">
 											<input type="submit" value="搜索" />
@@ -384,7 +384,7 @@ function SearchEmployees($connection, $search_query)
 											</tbody>
 										</table>
 									<?php } else { ?>
-										<p>没有找到帳號紀錄。</p>
+										<p>沒有找到帳號紀錄。</p>
 									<?php } ?>
 								</section>
 							</article>
@@ -394,7 +394,7 @@ function SearchEmployees($connection, $search_query)
 				<!-- 页脚 -->
 					<div id="footer">
 						<ul class="copyright">
-							<li>&copy; 未命名.</li><li>設計: <a href="http://html5up.net">HTML5 UP</a></li>
+							<li>&copy; 石家凱.</li><li>設計: <a href="http://html5up.net">石家凱</a></li>
 						</ul>
 					</div>
 
