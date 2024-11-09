@@ -256,49 +256,50 @@ function SearchEmployees($connection, $search_query)
 							</article>
 
 						<!-- 作品页面：删除员工功能 -->
-							<article id="work" class="panel">
-								<header>
-									<h2>帳號管理</h2>
-								</header>
-								<p>在此查看和删除帳號資料。</p>
-								<section>
-									<?php if (!empty($employee_list)) { ?>
-										<table>
-											<thead>
+						<article id="work" class="panel">
+							<header>
+								<h2>帳號管理</h2>
+							</header>
+							<p>在此查看和删除帳號資料。</p>
+							<section>
+								<?php if (!empty($employee_list)) { ?>
+									<table>
+										<thead>
+											<tr>
+												<th>ID</th>
+												<th>姓名</th>
+												<th>性别</th>
+												<th>電話</th>
+												<th>居住地址</th>
+												<th>電子郵件</th>
+												<th>操作</th>
+											</tr>
+										</thead>
+										<tbody>
+											<?php foreach ($employee_list as $employee) { ?>
 												<tr>
-													<th>ID</th>
-													<th>姓名</th>
-													<th>性别</th>
-													<th>電話</th>
-													<th>居住地址</th>
-													<th>電子郵件</th>
-													<th>操作</th>
+													<td><?php echo htmlspecialchars($employee['ID']); ?></td>
+													<td><?php echo htmlspecialchars($employee['NAME']); ?></td>
+													<td><?php echo htmlspecialchars($employee['GENDER']); ?></td>
+													<td><?php echo htmlspecialchars($employee['PHONE']); ?></td>
+													<td><?php echo htmlspecialchars($employee['ADDRESS']); ?></td>
+													<td><?php echo htmlspecialchars($employee['EMAIL']); ?></td>
+													<td>
+														<form action="" method="post" style="display:inline;">
+															<input type="hidden" name="delete_id" value="<?php echo $employee['ID']; ?>" />
+															<button type="submit" onclick="return confirm('確定刪除此員工？');">删除</button>
+														</form>
+													</td>
 												</tr>
-											</thead>
-											<tbody>
-												<?php foreach ($employee_list as $employee) { ?>
-													<tr>
-														<td><?php echo htmlspecialchars($employee['ID']); ?></td>
-														<td><?php echo htmlspecialchars($employee['NAME']); ?></td>
-														<td><?php echo htmlspecialchars($employee['GENDER']); ?></td>
-														<td><?php echo htmlspecialchars($employee['PHONE']); ?></td>
-														<td><?php echo htmlspecialchars($employee['ADDRESS']); ?></td>
-														<td><?php echo htmlspecialchars($employee['EMAIL']); ?></td>
-														<td>
-															<form action="" method="post" style="display:inline;">
-																<input type="hidden" name="delete_id" value="<?php echo $employee['ID']; ?>" />
-																<button type="submit" onclick="return confirm('確定刪除此員工？');">删除</button>
-															</form>
-														</td>
-													</tr>
-												<?php } ?>
-											</tbody>
-										</table>
-									<?php } else { ?>
-										<p>目前沒有帳號紀錄。</p>
-									<?php } ?>
-								</section>
-							</article>
+											<?php } ?>
+										</tbody>
+									</table>
+								<?php } else { ?>
+									<p>目前沒有帳號紀錄。</p>
+								<?php } ?>
+							</section>
+						</article>
+						
 
 						<!-- 联系页面：修改员工功能 -->
 							<article id="contact" class="panel">
