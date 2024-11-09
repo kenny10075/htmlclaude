@@ -2137,17 +2137,21 @@ input, select, textarea {
 							font-size: 1em;
 							margin: 0.25em 0 0 0;
 						}
-
-							/* 調整外部容器寬度 */
+		/* 調整外部容器寬度 */
 #wrapper {
-    max-width: 1200px; /* 增加寬度 */
+    max-width: 80em; /* 增加寬度 */
     padding: 2rem;
     margin: 0 auto;
 }
 
-/* 增加表格的寬度和間距 */
+/* 調整主體區域間距 */
+#main {
+    padding: 2em;
+}
+
+/* 調整表格的寬度和間距 */
 table {
-    width: 100%; /* 表格佔據全寬 */
+    width: 100%;
     border-collapse: separate;
     border-spacing: 15px; /* 增加欄位間距 */
 }
@@ -2162,16 +2166,27 @@ table th, table td {
     margin-bottom: 2rem;
 }
 
+/* 增加表單元素的字體大小和寬度 */
 input[type="text"], input[type="email"], select {
     font-size: 1.1rem; /* 增加輸入框的字體大小 */
     padding: 10px;
     width: 100%; /* 讓輸入框寬度更大 */
 }
 
-button {
+/* 調整按鈕的樣式 */
+button, input[type="submit"] {
     font-size: 1rem; /* 增加按鈕的字體大小 */
     padding: 10px 20px;
-}		
+    background-color: #333333;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover, input[type="submit"]:hover {
+    background-color: #555555;
+}
+
 
 				}
 
