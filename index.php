@@ -395,7 +395,7 @@ function SearchEmployees($connection, $search_query)
 				<!-- 页脚 -->
 					<div id="footer">
 						<ul class="copyright">
-							<li>&copy; 石家凱.</li><li>設計: <a href="http://html5up.net">石家凱</a></li>
+							<li>&copy; 石家凱.</li><li>設計: <a href="https://www.facebook.com/profile.php?id=100011758539887">石家凱</a></li>
 						</ul>
 					</div>
 
