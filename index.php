@@ -330,8 +330,8 @@ function SearchEmployees($connection, $search_query)
 										<div class="col-6 col-12-medium">
 											<input type="text" name="phone" placeholder="電話" required />
 										</div>
-										<div class="col-6 col-12-medium">
-											<input type="text" name="address" placeholder="居住地址" required />
+										<div class="col-12">
+											<input type="text" name="address" placeholder="居住地址" required />									
 										</div>
 										<div class="col-12">
 											<input type="email" name="email" placeholder="電子郵件" required />
