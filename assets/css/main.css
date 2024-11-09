@@ -2187,5 +2187,40 @@ input, select, textarea {
 				padding-left: 0.5em;
 				margin-left: 0.5em;
 			}
+			/* 調整外部容器寬度 */
+#wrapper {
+    max-width: 1200px; /* 增加寬度 */
+    padding: 2rem;
+    margin: 0 auto;
+}
+
+/* 增加表格的寬度和間距 */
+table {
+    width: 100%; /* 表格佔據全寬 */
+    border-collapse: separate;
+    border-spacing: 15px; /* 增加欄位間距 */
+}
+
+table th, table td {
+    padding: 10px 15px; /* 調整表格單元格的內邊距 */
+    font-size: 1.1rem; /* 增大字體 */
+}
+
+/* 增加其他元素的間距 */
+.panel header, .panel form, .panel section {
+    margin-bottom: 2rem;
+}
+
+input[type="text"], input[type="email"], select {
+    font-size: 1.1rem; /* 增加輸入框的字體大小 */
+    padding: 10px;
+    width: 100%; /* 讓輸入框寬度更大 */
+}
+
+button {
+    font-size: 1rem; /* 增加按鈕的字體大小 */
+    padding: 10px 20px;
+}
+
 
 		}
