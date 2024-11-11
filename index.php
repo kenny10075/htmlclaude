@@ -45,9 +45,12 @@ if (!empty($employee_name) && !empty($employee_gender) && !empty($employee_phone
     AddEmployee($connection, $employee_name, $employee_gender, $employee_phone, $employee_address, $employee_email);
 }
 
-/* 处理查询请求 */
+/* 获取所有员工数据用于 "帳號管理" */
+$full_employee_list = GetEmployeeList($connection);
+
+/* 处理查询请求，用于 "帳號查詢" */
 $search_query = isset($_POST['search']) ? htmlentities($_POST['search']) : '';
-$employee_list = empty($search_query) ? GetEmployeeList($connection) : SearchEmployees($connection, $search_query);
+$employee_list = empty($search_query) ? $full_employee_list : SearchEmployees($connection, $search_query);
 
 /* 关闭数据库连接 */
 mysqli_close($connection);
@@ -149,7 +152,7 @@ function DeleteEmployee($connection, $id)
     mysqli_stmt_close($stmt);
 }
 
-/* 函数：获取员工列表 */
+/* 函数：获取所有员工列表 */
 function GetEmployeeList($connection)
 {
     $query = "SELECT ID, NAME, GENDER, PHONE, ADDRESS, EMAIL FROM EMPLOYEES";
@@ -262,7 +265,7 @@ function SearchEmployees($connection, $search_query)
 							</header>
 							<p>在此查看和删除帳號資料。</p>
 							<section>
-								<?php if (!empty($employee_list)) { ?>
+								<?php if (!empty($full_employee_list)) { ?>
 									<table>
 										<thead>
 											<tr>
@@ -276,7 +279,7 @@ function SearchEmployees($connection, $search_query)
 											</tr>
 										</thead>
 										<tbody>
-											<?php foreach ($employee_list as $employee) { ?>
+											<?php foreach ($full_employee_list as $employee) { ?>
 												<tr>
 													<td><?php echo htmlspecialchars($employee['ID']); ?></td>
 													<td><?php echo htmlspecialchars($employee['NAME']); ?></td>
@@ -299,7 +302,6 @@ function SearchEmployees($connection, $search_query)
 								<?php } ?>
 							</section>
 						</article>
-						
 
 						<!-- 联系页面：修改员工功能 -->
 							<article id="contact" class="panel">
@@ -344,51 +346,52 @@ function SearchEmployees($connection, $search_query)
 							</article>
 
 						<!-- 列表页面：查询员工功能 -->
-							<article id="list" class="panel">
-								<header>
-									<h2>帳號查詢</h2>
-								</header>
-								<form action="" method="post">
-									<div class="row">
-										<div class="col-9 col-12-medium">
-											<input type="text" name="search" placeholder="輸入查詢條件..." value="<?php echo htmlspecialchars($search_query); ?>"/>
-										</div>
-										<div class="col-3 col-12-medium">
-											<input type="submit" value="搜索" />
-										</div>
+						<article id="list" class="panel">
+							<header>
+								<h2>帳號查詢</h2>
+							</header>
+							<form action="" method="post">
+								<div class="row">
+									<div class="col-9 col-12-medium">
+										<input type="text" name="search" placeholder="輸入查詢條件..." value="<?php echo htmlspecialchars($search_query); ?>"/>
 									</div>
-								</form>
-								<section>
-									<?php if (!empty($employee_list)) { ?>
-										<table>
-											<thead>
+									<div class="col-3 col-12-medium">
+										<input type="submit" value="搜索" />
+									</div>
+								</div>
+							</form>
+							<section>
+								<?php if (!empty($employee_list)) { ?>
+									<table>
+										<thead>
+											<tr>
+												<th>ID</th>
+												<th>姓名</th>
+												<th>性别</th>
+												<th>電話</th>
+												<th>居住地址</th>
+												<th>電子郵件</th>
+											</tr>
+										</thead>
+										<tbody>
+											<?php foreach ($employee_list as $employee) { ?>
 												<tr>
-													<th>ID</th>
-													<th>姓名</th>
-													<th>性别</th>
-													<th>電話</th>
-													<th>居住地址</th>
-													<th>電子郵件</th>
+													<td><?php echo htmlspecialchars($employee['ID']); ?></td>
+													<td><?php echo htmlspecialchars($employee['NAME']); ?></td>
+													<td><?php echo htmlspecialchars($employee['GENDER']); ?></td>
+													<td><?php echo htmlspecialchars($employee['PHONE']); ?></td>
+													<td><?php echo htmlspecialchars($employee['ADDRESS']); ?></td>
+													<td><?php echo htmlspecialchars($employee['EMAIL']); ?></td>
 												</tr>
-											</thead>
-											<tbody>
-												<?php foreach ($employee_list as $employee) { ?>
-													<tr>
-														<td><?php echo htmlspecialchars($employee['ID']); ?></td>
-														<td><?php echo htmlspecialchars($employee['NAME']); ?></td>
-														<td><?php echo htmlspecialchars($employee['GENDER']); ?></td>
-														<td><?php echo htmlspecialchars($employee['PHONE']); ?></td>
-														<td><?php echo htmlspecialchars($employee['ADDRESS']); ?></td>
-														<td><?php echo htmlspecialchars($employee['EMAIL']); ?></td>
-													</tr>
-												<?php } ?>
-											</tbody>
-										</table>
-									<?php } else { ?>
-										<p>沒有找到帳號紀錄。</p>
-									<?php } ?>
-								</section>
-							</article>
+											<?php } ?>
+										</tbody>
+									</table>
+								<?php } else { ?>
+									<p>沒有找到帳號紀錄。</p>
+								<?php } ?>
+							</section>
+						</article>
+
 
 					</div>
 
