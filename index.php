@@ -304,46 +304,46 @@ function SearchEmployees($connection, $search_query)
 						</article>
 
 						<!-- 联系页面：修改员工功能 -->
-							<article id="contact" class="panel">
-								<header>
-									<h2>修改帳號資料</h2>
-								</header>
-								<form action="" method="post">
-									<div class="row">
-										<div class="col-6 col-12-medium">
-											<label for="update_id">選擇帳號</label>
-											<select name="update_id" required>
-												<option value="">選擇帳號</option>
-												<?php foreach ($employee_list as $employee) { ?>
-													<option value="<?php echo $employee['ID']; ?>"><?php echo $employee['NAME']; ?></option>
-												<?php } ?>
-											</select>
-										</div>
-										<div class="col-6 col-12-medium">
-											<input type="text" name="name" placeholder="姓名" required />
-										</div>
-										<div class="col-6 col-12-medium">
-											<select name="gender" required>
-												<option value="">選擇性别</option>
-												<option value="男">男</option>
-												<option value="女">女</option>
-											</select>
-										</div>
-										<div class="col-6 col-12-medium">
-											<input type="text" name="phone" placeholder="電話" required />
-										</div>
-										<div class="col-6 col-12-medium">
-											<input type="text" name="address" placeholder="居住地址" required />
-										</div>
-										<div class="col-12">
-											<input type="email" name="email" placeholder="電子郵件" required />
-										</div>
-										<div class="col-12">
-											<input type="submit" value="更新信息" />
-										</div>
+						<article id="contact" class="panel">
+							<header>
+								<h2>修改帳號資料</h2>
+							</header>
+							<form action="" method="post">
+								<div class="row">
+									<div class="col-6 col-12-medium">
+										<label for="update_id">選擇帳號</label>
+										<select name="update_id" required>
+											<option value="">選擇帳號</option>
+											<?php foreach ($full_employee_list as $employee) { ?>
+												<option value="<?php echo $employee['ID']; ?>"><?php echo $employee['NAME']; ?></option>
+											<?php } ?>
+										</select>
 									</div>
-								</form>
-							</article>
+									<div class="col-6 col-12-medium">
+										<input type="text" name="name" placeholder="姓名" required />
+									</div>
+									<div class="col-6 col-12-medium">
+										<select name="gender" required>
+											<option value="">選擇性别</option>
+											<option value="男">男</option>
+											<option value="女">女</option>
+										</select>
+									</div>
+									<div class="col-6 col-12-medium">
+										<input type="text" name="phone" placeholder="電話" required />
+									</div>
+									<div class="col-6 col-12-medium">
+										<input type="text" name="address" placeholder="居住地址" required />
+									</div>
+									<div class="col-12">
+										<input type="email" name="email" placeholder="電子郵件" required />
+									</div>
+									<div class="col-12">
+										<input type="submit" value="更新信息" />
+									</div>
+								</div>
+							</form>
+						</article>
 
 						<!-- 列表页面：查询员工功能 -->
 						<article id="list" class="panel">
