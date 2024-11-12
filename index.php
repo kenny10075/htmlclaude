@@ -302,6 +302,7 @@ function SearchEmployees($connection, $search_query)
 								<?php } ?>
 							</section>
 						</article>
+						
 
 						<!-- 联系页面：修改员工功能 -->
 						<article id="contact" class="panel">
@@ -353,7 +354,8 @@ function SearchEmployees($connection, $search_query)
 							<form action="" method="post">
 								<div class="row">
 									<div class="col-9 col-12-medium">
-										<input type="text" name="search" placeholder="輸入查詢條件..." value="<?php echo htmlspecialchars($search_query); ?>"/>
+										<label for="search">查詢條件</label>
+										<input type="text" name="search" id="search" placeholder="輸入查詢條件..." value="<?php echo htmlspecialchars($search_query); ?>"/>
 									</div>
 									<div class="col-3 col-12-medium">
 										<input type="submit" value="搜索" />
@@ -391,6 +393,8 @@ function SearchEmployees($connection, $search_query)
 								<?php } ?>
 							</section>
 						</article>
+						
+						
 
 
 					</div>
